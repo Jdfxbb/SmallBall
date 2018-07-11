@@ -13,27 +13,27 @@ namespace SmallBall
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            
         }
 
         protected void Take_Click(object sender, EventArgs e)
         {
-
+            
         }
 
         protected void GuessFB_Click(object sender, EventArgs e)
         {
-
+            
         }
 
         protected void GuessBB_Click(object sender, EventArgs e)
         {
-
+            
         }
 
         protected void GuessOS_Click(object sender, EventArgs e)
         {
-
+            
         }
 
         protected void NewGame_Click(object sender, EventArgs e)
@@ -45,9 +45,6 @@ namespace SmallBall
                 Team opponent = new Team("Oakland", "Knights");
                 List<int> HomeScore = new List<int>();
                 Game game = new Game(user, opponent);
-
-                //BoxScore.DataSource = CreateBoxScore(user, opponent);
-                //BoxScore.DataBind();
             }
             else
             {
@@ -75,12 +72,25 @@ namespace SmallBall
         private int Balls { get; set; }
         private int Strikes { get; set; }
         private int Outs { get; set; }
+        RadioButton First, Second, Third, Home;
+        private RadioButton[] Bases;
 
         public Game(Team HomeTeam, Team AwayTeam)
         {
             this.HomeTeam = HomeTeam;
             this.AwayTeam = AwayTeam;
             Update();
+
+            First = (RadioButton)First.FindControl("First");
+            Second = (RadioButton)Second.FindControl("Second");
+            Third = (RadioButton)Third.FindControl("Third");
+            
+
+            
+            Bases[0] = First;
+            Bases[1] = Second;
+            Bases[2] = Third;
+
         }
 
         private void Update()
@@ -160,6 +170,21 @@ namespace SmallBall
             }
         }
 
+        private void AdvanceBases(int n)
+        {
+            for (int i = 0; i < n; i++)
+            {
+                for(int j = 0; j < 3; j++)
+                {
+                    if (Bases[j].Checked == true)
+                    {
+
+                    }
+                }
+            }
+
+        }
+
         ICollection CreateBoxScore()
         {
             DataTable DT = new DataTable();
@@ -173,10 +198,10 @@ namespace SmallBall
             {
                 DT.Columns.Add(new DataColumn(i.ToString(), typeof(int)));
             }
+
             DT.Columns.Add(new DataColumn("R", typeof(int)));
             DT.Columns.Add(new DataColumn("H", typeof(int)));
             DT.Columns.Add(new DataColumn("E", typeof(int)));
-
 
             hr[" "] = HomeTeam.Name;
             hr["R"] = HomeBox[0];
@@ -200,6 +225,38 @@ namespace SmallBall
             DataView dv = new DataView(DT);
             return dv;
         }
+
+    }
+
+    class Inning
+    {
+        public enum Side { Top, Bottom };
+
+        public int Num { get; private set; } = 1;
+        public Side Half { get; private set; } = Side.Top;
+        private Team Offense { get; set; }
+        private Team Defense { get; set; }
+
+        public static Inning operator ++(Inning i)
+        {
+            Inning result = new Inning();
+            i.Offense = result.Defense;
+            i.Defense = result.Offense;
+
+            if (i.Half == Side.Bottom)
+            {
+                result.Num = i.Num + 1;
+                result.Half = Side.Top;
+            }
+
+            else
+            {
+                result.Half = Side.Bottom;
+            }
+
+            return result;
+        }
+
 
     }
 
@@ -243,35 +300,25 @@ namespace SmallBall
         }
     }
 
-    class Inning
+    class Player
     {
-        public enum Side { Top, Bottom };
+        public string Name { get; private set; }
+        public int Bat { get; private set; }
+        public int Pitch { get; private set; }
+        public int Def { get; private set; }
 
-        public int Num { get; private set; } = 1;
-        public Side Half { get; private set; } = Side.Top;
-        private Team Offense { get; set; }
-        private Team Defense { get; set; }
-
-        public static Inning operator ++(Inning i)
+        Player(string Name)
         {
-            Inning result = new Inning();
-            i.Offense = result.Defense;
-            i.Defense = result.Offense;
-
-            if (i.Half == Side.Bottom)
-            {
-                result.Num = i.Num + 1;
-                result.Half = Side.Top;
-            }
-
-            else
-            {
-                result.Half = Side.Bottom;
-            }
-
-            return result;
+            this.Name = Name;
+            //IMPLEMENT RANDOM GENERATOR FOR STATS
         }
 
-
+        Player(string Name, int Bat, int Pitch, int Def)
+        {
+            this.Name = Name;
+            this.Bat = Bat;
+            this.Pitch = Pitch;
+            this.Def = Def;
+        }
     }
 }
