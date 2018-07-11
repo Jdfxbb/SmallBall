@@ -56,8 +56,6 @@ namespace SmallBall
         {
 
         }
-
-
     }
 
     class Game
@@ -75,6 +73,7 @@ namespace SmallBall
         RadioButton First, Second, Third, Home;
         private RadioButton[] Bases;
 
+        // Initialize game
         public Game(Team HomeTeam, Team AwayTeam)
         {
             this.HomeTeam = HomeTeam;
@@ -85,14 +84,13 @@ namespace SmallBall
             Second = (RadioButton)Second.FindControl("Second");
             Third = (RadioButton)Third.FindControl("Third");
             
-
-            
             Bases[0] = First;
             Bases[1] = Second;
             Bases[2] = Third;
 
         }
 
+        // Update BoxScore
         private void Update()
         {
             DataGrid BoxScore = new DataGrid();
@@ -101,6 +99,7 @@ namespace SmallBall
             BoxScore.DataBind();
         }
 
+        //Strike pitched
         private void Strike()
         {
             Strikes++;
@@ -110,6 +109,7 @@ namespace SmallBall
             }
         }
 
+        // Ball pitched
         private void Ball()
         {
             Balls++;
@@ -119,6 +119,7 @@ namespace SmallBall
             }
         }
 
+        // Out made
         private void Out()
         {
             Outs++;
@@ -130,14 +131,21 @@ namespace SmallBall
 
         private void Walk()
         {
-
+            AdvanceBases(1);
         }
 
+        private void Hit(int n)
+        {
+            AdvanceBases(n);
+        }
+
+        // Reset count for next batter
         private void ResetCount()
         {
             Strikes = Balls = 0;
         }
 
+        // reset inning to start new one, check winning conditions
         private void NextInning()
         {
             if (HomeScore > AwayScore && Inning.Num >= 9 && Inning.Half == Inning.Side.Top)
@@ -156,6 +164,7 @@ namespace SmallBall
             ResetCount();
         }
 
+        // assign win/ loss to team
         private void EndGame()
         {
             if (HomeScore > AwayScore)
@@ -170,19 +179,42 @@ namespace SmallBall
             }
         }
 
+        // advance n bases; 0 < n < 5
         private void AdvanceBases(int n)
         {
             for (int i = 0; i < n; i++)
             {
-                for(int j = 0; j < 3; j++)
+                if(Bases[2].Checked == true)
                 {
-                    if (Bases[j].Checked == true)
-                    {
-
-                    }
+                    Bases[2].Checked = false;
+                    Run();
+                }
+                if(Bases[1].Checked == true)
+                {
+                    Bases[1].Checked = false;
+                    Bases[2].Checked = true;
+                }
+                if (Bases[0].Checked == true)
+                {
+                    Bases[1].Checked = true;
                 }
             }
 
+        }
+
+        // assign run to team
+        private void Run()
+        {
+            if(Inning.Half == Inning.Side.Bottom)
+            {
+                HomeScore++;
+                HomeBox[Inning.Num]++;
+            }
+            else
+            {
+                AwayScore++;
+                AwayBox[Inning.Num]++;
+            }
         }
 
         ICollection CreateBoxScore()
