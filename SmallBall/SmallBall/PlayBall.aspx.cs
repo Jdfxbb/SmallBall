@@ -44,7 +44,7 @@ namespace SmallBall
                 Team user = new Team("Kansas City", TeamName.Text);
                 Team opponent = new Team("Oakland", "Knights");
                 List<int> HomeScore = new List<int>();
-                Game game = new Game(user, opponent);
+                Game game = new Game(ref user, ref opponent);
             }
             else
             {
@@ -70,14 +70,20 @@ namespace SmallBall
         private int Balls { get; set; }
         private int Strikes { get; set; }
         private int Outs { get; set; }
-        RadioButton First, Second, Third, Home;
+        RadioButton First, Second, Third;
         private RadioButton[] Bases;
 
         // Initialize game
-        public Game(Team HomeTeam, Team AwayTeam)
+        public Game(ref Team HomeTeam, ref Team AwayTeam)
         {
-            this.HomeTeam = HomeTeam;
-            this.AwayTeam = AwayTeam;
+            HomeTeam.NewGame();
+            AwayTeam.NewGame();
+            
+            
+
+
+
+
             Update();
 
             First = (RadioButton)First.FindControl("First");
@@ -169,13 +175,13 @@ namespace SmallBall
         {
             if (HomeScore > AwayScore)
             {
-                HomeTeam.win();
-                AwayTeam.lose();
+                HomeTeam.Win();
+                AwayTeam.Lose();
             }
             else
             {
-                AwayTeam.win();
-                HomeTeam.lose();
+                AwayTeam.Win();
+                HomeTeam.Lose();
             }
         }
 
@@ -226,9 +232,9 @@ namespace SmallBall
 
             DT.Columns.Add(new DataColumn(" ", typeof(String)));
 
-            for (int i = 1; i < HomeBox.Count() - 2; i++)
+            for (int i = 0; i < HomeBox.Count(); i++)
             {
-                DT.Columns.Add(new DataColumn(i.ToString(), typeof(int)));
+                DT.Columns.Add(new DataColumn(i.ToString() + 1, typeof(int)));
             }
 
             DT.Columns.Add(new DataColumn("R", typeof(int)));
@@ -236,14 +242,14 @@ namespace SmallBall
             DT.Columns.Add(new DataColumn("E", typeof(int)));
 
             hr[" "] = HomeTeam.Name;
-            hr["R"] = HomeBox[0];
-            hr["H"] = HomeBox[1];
-            hr["E"] = HomeBox[2];
+            hr["R"] = HomeTeam.Runs;
+            hr["H"] = HomeTeam.Hits;
+            hr["E"] = HomeTeam.Errors;
 
             ar[" "] = AwayTeam.Name;
-            ar["R"] = AwayBox[0];
-            ar["H"] = AwayBox[1];
-            ar["E"] = AwayBox[2];
+            ar["R"] = AwayTeam.Runs;
+            ar["H"] = AwayTeam.Hits;
+            ar["E"] = AwayTeam.Errors;
 
             for (int i = 3; i < Math.Max(HomeBox.Count(), AwayBox.Count()); i++)
             {
@@ -296,8 +302,13 @@ namespace SmallBall
     {
         public string City { get; }
         public string Name { get; }
+        public int Runs { get; private set; }
+        public int Hits { get; private set; }
+        public int Errors { get; private set; }
         private int Wins { get; set; } = 0;
         private int Losses { get; set; } = 0;
+       
+        
 
         public Team()
         {
@@ -316,19 +327,24 @@ namespace SmallBall
             this.Name = t.Name;
         }
 
-        public void win()
+        public void Win()
         {
             Wins++;
         }
 
-        public void lose()
+        public void Lose()
         {
             Losses++;
         }
 
-        public int gamesPlayed()
+        public int GamesPlayed()
         {
             return Wins + Losses;
+        }
+
+        public void NewGame()
+        {
+            Runs = Hits = Errors = 0;
         }
     }
 
