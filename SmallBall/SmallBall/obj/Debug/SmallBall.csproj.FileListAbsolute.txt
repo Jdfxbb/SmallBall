@@ -51,8 +51,8 @@ C:\Users\Joshua\source\repos\SmallBall\SmallBall\SmallBall\bin\roslyn\VBCSCompil
 C:\Users\Joshua\source\repos\SmallBall\SmallBall\SmallBall\bin\roslyn\VBCSCompiler.exe.config
 C:\Users\Joshua\source\repos\SmallBall\SmallBall\SmallBall\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
 C:\Users\Joshua\source\repos\SmallBall\SmallBall\SmallBall\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-C:\Users\Joshua\source\repos\SmallBall\SmallBall\SmallBall\obj\Debug\SmallBall.csprojAssemblyReference.cache
 C:\Users\Joshua\source\repos\SmallBall\SmallBall\SmallBall\obj\Debug\SmallBall.csproj.CoreCompileInputs.cache
 C:\Users\Joshua\source\repos\SmallBall\SmallBall\SmallBall\obj\Debug\SmallBall.csproj.CopyComplete
 C:\Users\Joshua\source\repos\SmallBall\SmallBall\SmallBall\obj\Debug\SmallBall.dll
 C:\Users\Joshua\source\repos\SmallBall\SmallBall\SmallBall\obj\Debug\SmallBall.pdb
+C:\Users\Joshua\source\repos\SmallBall\SmallBall\SmallBall\obj\Debug\SmallBall.csprojAssemblyReference.cache

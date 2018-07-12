@@ -13,7 +13,10 @@ namespace SmallBall
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            DataGrid B = new DataGrid();
+            BoxScore = B.FindControl("BoxScore") as DataGrid;
             
+            BoxScore.DataBind();
         }
 
         protected void Take_Click(object sender, EventArgs e)
@@ -43,8 +46,7 @@ namespace SmallBall
                 TeamName.Visible = false;
                 Team user = new Team("Kansas City", TeamName.Text);
                 Team opponent = new Team("Oakland", "Knights");
-                List<int> HomeScore = new List<int>();
-                Game game = new Game(ref user, ref opponent);
+                Game game = new Game(user, opponent);
             }
             else
             {
@@ -56,35 +58,54 @@ namespace SmallBall
         {
 
         }
+
+        protected void Walk_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        protected void Out_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Single_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Double_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 
     class Game
     {
-        private Team HomeTeam { get; }
-        private Team AwayTeam { get; }
-        private Inning Inning { get; set; }
-        private List<int> HomeBox { get; set; }
-        private List<int> AwayBox { get; set; }
-        private int HomeScore { get; set; }
-        private int AwayScore { get; set; }
+        private Team HomeTeam { get; set; }
+        private Team AwayTeam { get; set; }
+        private Team[] Teams = new Team[2];
+        private Inning Inning { get; set; } = new Inning();
+        private ScoreBoard BoxScore { get; }
         private int Balls { get; set; }
         private int Strikes { get; set; }
         private int Outs { get; set; }
-        RadioButton First, Second, Third;
-        private RadioButton[] Bases;
+        private RadioButton First = new RadioButton();
+        private RadioButton Second = new RadioButton();
+        private RadioButton Third = new RadioButton();
+        private RadioButton[] Bases = new RadioButton[3];
 
         // Initialize game
-        public Game(ref Team HomeTeam, ref Team AwayTeam)
+        public Game(Team HomeTeam, Team AwayTeam)
         {
             HomeTeam.NewGame();
             AwayTeam.NewGame();
+
+            Teams = new Team[] { HomeTeam, AwayTeam };
+
+            HomeTeam.Box.Insert(0, 0);
+
             
-            
-
-
-
-
-            Update();
 
             First = (RadioButton)First.FindControl("First");
             Second = (RadioButton)Second.FindControl("Second");
@@ -94,15 +115,7 @@ namespace SmallBall
             Bases[1] = Second;
             Bases[2] = Third;
 
-        }
-
-        // Update BoxScore
-        private void Update()
-        {
-            DataGrid BoxScore = new DataGrid();
-            BoxScore = (DataGrid)BoxScore.FindControl("BoxScore");
-            BoxScore.DataSource = CreateBoxScore();
-            BoxScore.DataBind();
+            BoxScore = new ScoreBoard(HomeTeam, AwayTeam);
         }
 
         //Strike pitched
@@ -154,11 +167,11 @@ namespace SmallBall
         // reset inning to start new one, check winning conditions
         private void NextInning()
         {
-            if (HomeScore > AwayScore && Inning.Num >= 9 && Inning.Half == Inning.Side.Top)
+            if (HomeTeam.Runs > AwayTeam.Runs && Inning.Num >= 9)
             {
                 EndGame();
             }
-            else if (AwayScore > HomeScore && Inning.Num >= 9 && Inning.Half == Inning.Side.Bottom)
+            else if (AwayTeam.Runs > HomeTeam.Runs && Inning.Num >= 9)
             {
                 EndGame();
             }
@@ -168,12 +181,14 @@ namespace SmallBall
             }
             Outs = 0;
             ResetCount();
+            HomeTeam.NextInning();
+            AwayTeam.NextInning();
         }
 
         // assign win/ loss to team
         private void EndGame()
         {
-            if (HomeScore > AwayScore)
+            if (HomeTeam.Runs > AwayTeam.Runs)
             {
                 HomeTeam.Win();
                 AwayTeam.Lose();
@@ -211,19 +226,151 @@ namespace SmallBall
         // assign run to team
         private void Run()
         {
-            if(Inning.Half == Inning.Side.Bottom)
+            Teams[(int)Inning.Half].Run(Inning.Num);
+        }
+    }
+
+    class Inning
+    {
+        public enum Side { Top, Bottom };
+
+        public int Num { get; private set; } = 1;
+        public Side Half { get; private set; } = Side.Top;
+        private Team Offense { get; set; }
+        private Team Defense { get; set; }
+
+        public Inning() { }
+
+        public static Inning operator ++(Inning i)
+        {
+            Inning result = new Inning();
+            i.Offense = result.Defense;
+            i.Defense = result.Offense;
+
+            if (i.Half == Side.Bottom)
             {
-                HomeScore++;
-                HomeBox[Inning.Num]++;
+                result.Num = i.Num + 1;
+                result.Half = Side.Top;
             }
+
             else
             {
-                AwayScore++;
-                AwayBox[Inning.Num]++;
+                result.Half = Side.Bottom;
             }
+
+            return result;
         }
 
-        ICollection CreateBoxScore()
+
+    }
+
+    class Team
+    {
+        public string City { get; }
+        public string Name { get; }
+        public int Runs { get; private set; }
+        public int Hits { get; private set; }
+        public int Errors { get; private set; }
+        public List<int> Box { get; set; }
+        private int Wins { get; set; } = 0;
+        private int Losses { get; set; } = 0;
+
+        public Team(string city, string name)
+        {
+            this.City = city;
+            this.Name = name;
+            Box = new List<int>();
+        }
+
+        public Team(Team t)
+        {
+            this.City = t.City;
+            this.Name = t.Name;
+            Box = new List<int>();
+        }
+
+        public void Win()
+        {
+            Wins++;
+        }
+
+        public void Lose()
+        {
+            Losses++;
+        }
+
+        public int GamesPlayed()
+        {
+            return Wins + Losses;
+        }
+
+        public void NewGame()
+        {
+            Runs = Hits = Errors = 0;
+        }
+
+        public void Run(int n)
+        {
+            Runs++;
+            Box[n]++;
+        }
+
+        public void Hit()
+        {
+            Hits++;
+        }
+
+        public void Error()
+        {
+            Errors++;
+        }
+
+        public void NextInning()
+        {
+            Box.Insert(Box.Count(), 0);
+        }
+    }
+
+    class Player
+    {
+        public string Name { get; private set; }
+        public int Bat { get; private set; }
+        public int Pitch { get; private set; }
+        public int Def { get; private set; }
+
+        Player(string Name)
+        {
+            this.Name = Name;
+            //IMPLEMENT RANDOM GENERATOR FOR STATS
+        }
+
+        Player(string Name, int Bat, int Pitch, int Def)
+        {
+            this.Name = Name;
+            this.Bat = Bat;
+            this.Pitch = Pitch;
+            this.Def = Def;
+        }
+    }
+
+    class ScoreBoard
+    {
+        private List<int> HomeBox { get; set; } = new List<int>();
+        private List<int> AwayBox { get; set; } = new List<int>();
+        Team HomeTeam, AwayTeam;
+        public DataGrid BoxScore;
+
+        public ScoreBoard(Team HomeTeam, Team AwayTeam)
+        {
+            this.HomeTeam = HomeTeam;
+            this.AwayTeam = AwayTeam;
+            BoxScore = new DataGrid();
+            BoxScore = BoxScore.FindControl("BoxScore") as DataGrid;
+            BoxScore.DataSource = CreateBoxScore();
+            BoxScore.DataBind();
+        }
+
+        private ICollection CreateBoxScore()
         {
             DataTable DT = new DataTable();
             DataRow hr, ar;
@@ -262,111 +409,6 @@ namespace SmallBall
 
             DataView dv = new DataView(DT);
             return dv;
-        }
-
-    }
-
-    class Inning
-    {
-        public enum Side { Top, Bottom };
-
-        public int Num { get; private set; } = 1;
-        public Side Half { get; private set; } = Side.Top;
-        private Team Offense { get; set; }
-        private Team Defense { get; set; }
-
-        public static Inning operator ++(Inning i)
-        {
-            Inning result = new Inning();
-            i.Offense = result.Defense;
-            i.Defense = result.Offense;
-
-            if (i.Half == Side.Bottom)
-            {
-                result.Num = i.Num + 1;
-                result.Half = Side.Top;
-            }
-
-            else
-            {
-                result.Half = Side.Bottom;
-            }
-
-            return result;
-        }
-
-
-    }
-
-    class Team
-    {
-        public string City { get; }
-        public string Name { get; }
-        public int Runs { get; private set; }
-        public int Hits { get; private set; }
-        public int Errors { get; private set; }
-        private int Wins { get; set; } = 0;
-        private int Losses { get; set; } = 0;
-       
-        
-
-        public Team()
-        {
-            this.City = this.Name = "";
-        }
-
-        public Team(string city, string name)
-        {
-            this.City = city;
-            this.Name = name;
-        }
-
-        public Team(Team t)
-        {
-            this.City = t.City;
-            this.Name = t.Name;
-        }
-
-        public void Win()
-        {
-            Wins++;
-        }
-
-        public void Lose()
-        {
-            Losses++;
-        }
-
-        public int GamesPlayed()
-        {
-            return Wins + Losses;
-        }
-
-        public void NewGame()
-        {
-            Runs = Hits = Errors = 0;
-        }
-    }
-
-    class Player
-    {
-        public string Name { get; private set; }
-        public int Bat { get; private set; }
-        public int Pitch { get; private set; }
-        public int Def { get; private set; }
-
-        Player(string Name)
-        {
-            this.Name = Name;
-            //IMPLEMENT RANDOM GENERATOR FOR STATS
-        }
-
-        Player(string Name, int Bat, int Pitch, int Def)
-        {
-            this.Name = Name;
-            this.Bat = Bat;
-            this.Pitch = Pitch;
-            this.Def = Def;
         }
     }
 }
