@@ -13,10 +13,20 @@ namespace SmallBall
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            DataGrid B = new DataGrid();
-            BoxScore = B.FindControl("BoxScore") as DataGrid;
+            Team a = new Team("KC", "Bears");
+            Team b = new Team("NY", "Knights");
+            Game g = new Game(a, b);
             
-            BoxScore.DataBind();
+
+            DataGrid Board = this.form1.FindControl("BoxScore") as DataGrid;
+            ScoreBoard s = new ScoreBoard();
+            Board.DataSource = s.CreateBoxScore(a, b);
+            Board.DataBind();
+
+            //ScoreBoard s = new ScoreBoard(a, b, board);
+            //RadioButton b = this.form1.FindControl("Radio") as RadioButton;
+            //b.Checked = true;
+            
         }
 
         protected void Take_Click(object sender, EventArgs e)
@@ -103,7 +113,7 @@ namespace SmallBall
 
             Teams = new Team[] { HomeTeam, AwayTeam };
 
-            HomeTeam.Box.Insert(0, 0);
+            AwayTeam.Box.Insert(0, 0);
 
             
 
@@ -115,7 +125,7 @@ namespace SmallBall
             Bases[1] = Second;
             Bases[2] = Third;
 
-            BoxScore = new ScoreBoard(HomeTeam, AwayTeam);
+            //BoxScore = new ScoreBoard(HomeTeam, AwayTeam);
         }
 
         //Strike pitched
@@ -355,22 +365,11 @@ namespace SmallBall
 
     class ScoreBoard
     {
-        private List<int> HomeBox { get; set; } = new List<int>();
-        private List<int> AwayBox { get; set; } = new List<int>();
-        Team HomeTeam, AwayTeam;
-        public DataGrid BoxScore;
+        public DataGrid BoxScore = new DataGrid();
 
-        public ScoreBoard(Team HomeTeam, Team AwayTeam)
-        {
-            this.HomeTeam = HomeTeam;
-            this.AwayTeam = AwayTeam;
-            BoxScore = new DataGrid();
-            BoxScore = BoxScore.FindControl("BoxScore") as DataGrid;
-            BoxScore.DataSource = CreateBoxScore();
-            BoxScore.DataBind();
-        }
+        public ScoreBoard() { }
 
-        private ICollection CreateBoxScore()
+        public ICollection CreateBoxScore(Team Home, Team Away)
         {
             DataTable DT = new DataTable();
             DataRow hr, ar;
@@ -379,30 +378,38 @@ namespace SmallBall
 
             DT.Columns.Add(new DataColumn(" ", typeof(String)));
 
-            for (int i = 0; i < HomeBox.Count(); i++)
+            for (int i = 0; i < Away.Box.Count(); i++)
             {
-                DT.Columns.Add(new DataColumn(i.ToString() + 1, typeof(int)));
+                DT.Columns.Add(new DataColumn((i + 1).ToString(), typeof(int)));
             }
 
             DT.Columns.Add(new DataColumn("R", typeof(int)));
             DT.Columns.Add(new DataColumn("H", typeof(int)));
             DT.Columns.Add(new DataColumn("E", typeof(int)));
 
-            hr[" "] = HomeTeam.Name;
-            hr["R"] = HomeTeam.Runs;
-            hr["H"] = HomeTeam.Hits;
-            hr["E"] = HomeTeam.Errors;
+            
 
-            ar[" "] = AwayTeam.Name;
-            ar["R"] = AwayTeam.Runs;
-            ar["H"] = AwayTeam.Hits;
-            ar["E"] = AwayTeam.Errors;
+            ar[" "] = Away.Name;
+            ar["R"] = Away.Runs;
+            ar["H"] = Away.Hits;
+            ar["E"] = Away.Errors;
 
-            for (int i = 3; i < Math.Max(HomeBox.Count(), AwayBox.Count()); i++)
+            hr[" "] = Home.Name;
+            hr["R"] = Home.Runs;
+            hr["H"] = Home.Hits;
+            hr["E"] = Home.Errors;
+
+            for (int i = 0; i < Away.Box.Count(); i++)
             {
-                hr[i - 2] = HomeBox[i];
-                ar[i - 2] = AwayBox[i];
+                ar[(i + 1).ToString()] = Away.Box[i];
             }
+
+            for (int i = 0; i < Home.Box.Count(); i++)
+            {
+                hr[(i+1).ToString()] = Home.Box[i];
+            }
+
+            
 
             DT.Rows.Add(ar);
             DT.Rows.Add(hr);

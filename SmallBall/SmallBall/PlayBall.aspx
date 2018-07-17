@@ -7,7 +7,9 @@
     <title></title>
 </head>
 <body>
+    
     <form id="form1" runat="server">
+        
         <asp:Button ID="NewGame" runat="server" Text="New Game" Width="200px" OnClick="NewGame_Click" />
         <asp:TextBox ID="TeamName" runat="server" OnTextChanged="TeamName_TextChanged"></asp:TextBox>
         
@@ -41,14 +43,11 @@
         <div>
             <asp:RadioButton ID="Third" runat="server" BorderWidth="100" BorderColor="#996633" Enabled="false" ForeColor="Black"/>
             <asp:RadioButton ID="Second" runat="server" BorderWidth="100" BorderColor="#996633" Enabled="false"/>
-
         </div>
         <div>
             <asp:RadioButton ID="Home" runat="server" BorderWidth="100" BorderColor="#996633" Enabled="false" ForeColor="Black"/>
             <asp:RadioButton ID="First" runat="server" BorderWidth="100" BorderColor="#996633" Enabled="false"/>
         </div>
-        
     </form>
 </body>
 </html>
-
