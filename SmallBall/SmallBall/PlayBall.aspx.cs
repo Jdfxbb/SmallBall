@@ -13,19 +13,11 @@ namespace SmallBall
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            Team a = new Team("KC", "Bears");
-            Team b = new Team("NY", "Knights");
-            Game g = new Game(a, b);
             
-
             DataGrid Board = this.form1.FindControl("BoxScore") as DataGrid;
             ScoreBoard s = new ScoreBoard();
-            Board.DataSource = s.CreateBoxScore(a, b);
+            //Board.DataSource = s.CreateBoxScore(a, b);
             Board.DataBind();
-
-            //ScoreBoard s = new ScoreBoard(a, b, board);
-            //RadioButton b = this.form1.FindControl("Radio") as RadioButton;
-            //b.Checked = true;
             
         }
 
@@ -51,17 +43,7 @@ namespace SmallBall
 
         protected void NewGame_Click(object sender, EventArgs e)
         {
-            if (TeamName.Text != "")
-            {
-                TeamName.Visible = false;
-                Team user = new Team("Kansas City", TeamName.Text);
-                Team opponent = new Team("Oakland", "Knights");
-                Game game = new Game(user, opponent);
-            }
-            else
-            {
-                TeamName.Text = "Enter Team Name";
-            }
+            
         }
 
         protected void TeamName_TextChanged(object sender, EventArgs e)
@@ -85,6 +67,21 @@ namespace SmallBall
         }
 
         protected void Double_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void NewCareer_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void LoadCareer_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Practice_Click(object sender, EventArgs e)
         {
 
         }

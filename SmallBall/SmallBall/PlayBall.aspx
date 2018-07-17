@@ -7,26 +7,17 @@
     <title></title>
 </head>
 <body>
-    
     <form id="form1" runat="server">
-        
-        <asp:Button ID="NewGame" runat="server" Text="New Game" Width="200px" OnClick="NewGame_Click" />
-        <asp:TextBox ID="TeamName" runat="server" OnTextChanged="TeamName_TextChanged"></asp:TextBox>
-        
-        <div><asp:Button ID="Take" runat="server" Text="Take" Width="200px" OnClick="Take_Click" />
-            <asp:Button ID="Walk" runat="server" Text="Walk" Width="200px" OnClick="Walk_Click"/>
-        </div>
-        <div><asp:Button ID="GuessFB" runat="server" Text="Guess Fastball" Width="200px" OnClick="GuessFB_Click"/>
-            <asp:Button ID="Out" runat="server" Text="Out" Width="200px" OnClick="Out_Click"/>
-        </div>
-        <div><asp:Button ID="GuessBB" runat="server" Text="Guess Breaking Ball" Width="200px" OnClick="GuessBB_Click" />
-            <asp:Button ID="Single" runat="server" Text="Single" Width="200px" OnClick="Single_Click"/>
-        </div>
-        <div><asp:Button ID="GuessOS" runat="server" Text="Guess Off Speed" Width="200px" OnClick="GuessOS_Click" />
-            <asp:Button ID="Double" runat="server" Text="Double" Width="200px" OnClick="Double_Click"/>
-        </div>
-           <div>
-            <asp:DataGrid ID="BoxScore" 
+        <div><asp:Button ID="NewCareer" runat="server" Text ="New Career" Width="25%" OnClick="NewCareer_Click" /></div>
+        <div><asp:Button ID="LoadCareer" runat="server" Text ="Load Career" Width="25%" OnClick="LoadCareer_Click" /></div>
+        <div><asp:Button ID="Practice" runat="server" Text ="Practice" Width="25%" OnClick="Practice_Click" /></div>
+        <asp:Button ID="NewGame" runat="server" Text="New Game" Width="25%" OnClick="NewGame_Click" />
+        <asp:TextBox ID="TeamName" runat="server" OnTextChanged="TeamName_TextChanged" Width="25%"></asp:TextBox>
+        <div><asp:Button ID="Take" runat="server" Text="Take" Width="25%" OnClick="Take_Click" /></div>
+        <div><asp:Button ID="GuessFB" runat="server" Text="Guess Fastball" Width="25%" OnClick="GuessFB_Click"/></div>
+        <div><asp:Button ID="GuessBB" runat="server" Text="Guess Breaking Ball" Width="25%" OnClick="GuessBB_Click" /></div>
+        <div><asp:Button ID="GuessOS" runat="server" Text="Guess Off Speed" Width="25%" OnClick="GuessOS_Click" /></div>
+        <div><asp:DataGrid ID="BoxScore" 
                 runat="server" 
                 BorderColor="Black" 
                 BorderWidth="1" 
@@ -38,8 +29,7 @@
                 GridLines="Both" 
                 BorderStyle="Ridge" 
                 ItemStyle-BorderColor="gray" HeaderStyle-BorderColor="Gray">            
-            </asp:DataGrid>
-        </div>
+            </asp:DataGrid></div>
         <div>
             <asp:RadioButton ID="Third" runat="server" BorderWidth="100" BorderColor="#996633" Enabled="false" ForeColor="Black"/>
             <asp:RadioButton ID="Second" runat="server" BorderWidth="100" BorderColor="#996633" Enabled="false"/>

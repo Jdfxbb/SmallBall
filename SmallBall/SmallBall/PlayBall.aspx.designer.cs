@@ -22,6 +22,33 @@ namespace SmallBall {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
+        /// NewCareer control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button NewCareer;
+        
+        /// <summary>
+        /// LoadCareer control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button LoadCareer;
+        
+        /// <summary>
+        /// Practice control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button Practice;
+        
+        /// <summary>
         /// NewGame control.
         /// </summary>
         /// <remarks>
@@ -49,15 +76,6 @@ namespace SmallBall {
         protected global::System.Web.UI.WebControls.Button Take;
         
         /// <summary>
-        /// Walk control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Walk;
-        
-        /// <summary>
         /// GuessFB control.
         /// </summary>
         /// <remarks>
@@ -65,15 +83,6 @@ namespace SmallBall {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button GuessFB;
-        
-        /// <summary>
-        /// Out control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Out;
         
         /// <summary>
         /// GuessBB control.
@@ -85,15 +94,6 @@ namespace SmallBall {
         protected global::System.Web.UI.WebControls.Button GuessBB;
         
         /// <summary>
-        /// Single control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Single;
-        
-        /// <summary>
         /// GuessOS control.
         /// </summary>
         /// <remarks>
@@ -101,15 +101,6 @@ namespace SmallBall {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button GuessOS;
-        
-        /// <summary>
-        /// Double control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Double;
         
         /// <summary>
         /// BoxScore control.
