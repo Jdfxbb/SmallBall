@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Collections;
+using System.Web.ApplicationServices;
 
 namespace SmallBall
 {
@@ -14,31 +15,70 @@ namespace SmallBall
         protected void Page_Load(object sender, EventArgs e)
         {
             
-            DataGrid Board = this.form1.FindControl("BoxScore") as DataGrid;
-            ScoreBoard s = new ScoreBoard();
-            //Board.DataSource = s.CreateBoxScore(a, b);
-            Board.DataBind();
-            
         }
 
         protected void Take_Click(object sender, EventArgs e)
         {
-            
+            UserGame game = (UserGame)Application.Contents.Get("game");
+            RadioButton[] bases = (RadioButton[])Application.Contents.Get("bases");
+            game.Take();
+            Game_Manager(game);
         }
 
         protected void GuessFB_Click(object sender, EventArgs e)
         {
-            
+            UserGame game = (UserGame)Application.Contents.Get("game");
+            //RadioButton[] bases = (RadioButton[])Application.Contents.Get("bases");
+            game.GuessFB();
+            Game_Manager(game);
         }
 
         protected void GuessBB_Click(object sender, EventArgs e)
         {
-            
+            UserGame game = (UserGame)Application.Contents.Get("game");
+            //RadioButton[] bases = (RadioButton[])Application.Contents.Get("bases");
+            game.GuessBB();
+            Game_Manager(game);
         }
 
         protected void GuessOS_Click(object sender, EventArgs e)
         {
-            
+            UserGame game = (UserGame)Application.Contents.Get("game");
+            //RadioButton[] bases = (RadioButton[])Application.Contents.Get("bases");
+            game.GuessOS();
+            Game_Manager(game);
+        }
+
+        protected void PitchOut_Click(object sender, EventArgs e)
+        {
+            UserGame game = (UserGame)Application.Contents.Get("game");
+            //RadioButton[] bases = (RadioButton[])Application.Contents.Get("bases");
+            game.PitchOut();
+            Game_Manager(game);
+        }
+
+        protected void Fastball_Click(object sender, EventArgs e)
+        {
+            UserGame game = (UserGame)Application.Contents.Get("game");
+            //RadioButton[] bases = (RadioButton[])Application.Contents.Get("bases");
+            game.PitchFB();
+            Game_Manager(game);
+        }
+
+        protected void OffSpeed_Click(object sender, EventArgs e)
+        {
+            UserGame game = (UserGame)Application.Contents.Get("game");
+            //RadioButton[] bases = (RadioButton[])Application.Contents.Get("bases");
+            game.PitchOS();
+            Game_Manager(game);
+        }
+
+        protected void BreakingBall_Click(object sender, EventArgs e)
+        {
+            UserGame game = (UserGame)Application.Contents.Get("game");
+            //RadioButton[] bases = (RadioButton[])Application.Contents.Get("bases");
+            game.PitchBB();
+            Game_Manager(game);
         }
 
         protected void NewGame_Click(object sender, EventArgs e)
@@ -48,27 +88,7 @@ namespace SmallBall
 
         protected void TeamName_TextChanged(object sender, EventArgs e)
         {
-
-        }
-
-        protected void Walk_Click(object sender, EventArgs e)
-        {
             
-        }
-
-        protected void Out_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        protected void Single_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        protected void Double_Click(object sender, EventArgs e)
-        {
-
         }
 
         protected void NewCareer_Click(object sender, EventArgs e)
@@ -78,33 +98,73 @@ namespace SmallBall
 
         protected void LoadCareer_Click(object sender, EventArgs e)
         {
-
+            
         }
 
         protected void Practice_Click(object sender, EventArgs e)
         {
+            Team user = new Team("KC", "Bears");
+            Team opp = new Team("NY", "Knights");
+            UserGame game = new UserGame(user, opp, true);
+            Application.Contents.Add("game", game);
 
+            Game_Manager(game);
+        }
+
+        protected void Game_Manager(Game game)
+        {
+            ScoreBoard s = new ScoreBoard();
+            DataGrid Board = this.form1.FindControl("BoxScore") as DataGrid;
+            Board.DataSource = s.CreateBoxScore(game.HomeTeam, game.AwayTeam);
+            Board.DataBind();
+
+            TextBox Balls = this.form1.FindControl("Balls") as TextBox;
+            TextBox Strikes = this.form1.FindControl("Strikes") as TextBox;
+            TextBox Outs = this.form1.FindControl("Outs") as TextBox;
+
+            Balls.Text = game.Balls.ToString();
+
+            Strikes.Text = game.Strikes.ToString();
+
+            Outs.Text = game.Outs.ToString();
+
+            RadioButton First = this.form1.FindControl("First") as RadioButton;
+            RadioButton Second = this.form1.FindControl("Second") as RadioButton;
+            RadioButton Third = this.form1.FindControl("Third") as RadioButton;
+
+            First.Checked = game.First.Checked;
+            Second.Checked = game.Second.Checked;
+            Third.Checked = game.Third.Checked;
         }
     }
 
-    class Game
+    public class Game
     {
-        private Team HomeTeam { get; set; }
-        private Team AwayTeam { get; set; }
+        
         private Team[] Teams = new Team[2];
         private Inning Inning { get; set; } = new Inning();
         private ScoreBoard BoxScore { get; }
-        private int Balls { get; set; }
-        private int Strikes { get; set; }
-        private int Outs { get; set; }
-        private RadioButton First = new RadioButton();
-        private RadioButton Second = new RadioButton();
-        private RadioButton Third = new RadioButton();
-        private RadioButton[] Bases = new RadioButton[3];
+        public int Balls { get; private set; }
+        public int Strikes { get; private set; }
+        public int Outs { get; private set; }
+        public RadioButton First { get; set; } = new RadioButton();
+        public RadioButton Second { get; set; } = new RadioButton();
+        public RadioButton Third { get; set; } = new RadioButton();
+        public RadioButton[] Bases { get; set; } = new RadioButton[3];
+        public enum Swings { Take, Fastball, BreakingBall, OffSpeed };
+        public enum Pitches { PitchOut, Fastball, BreakingBall, OffSpeed };
+        public Swings swings;
+        public Pitches pitches;
+        public Random random = new Random();
+        public Team HomeTeam { get; set; }
+        public Team AwayTeam { get; set; }
 
         // Initialize game
-        public Game(Team HomeTeam, Team AwayTeam)
+        public Game(Team Home, Team Away)
         {
+            HomeTeam = Home;
+            AwayTeam = Away;
+
             HomeTeam.NewGame();
             AwayTeam.NewGame();
 
@@ -112,55 +172,68 @@ namespace SmallBall
 
             AwayTeam.Box.Insert(0, 0);
 
-            
+            First.Checked = Second.Checked = Third.Checked = false;
 
-            First = (RadioButton)First.FindControl("First");
-            Second = (RadioButton)Second.FindControl("Second");
-            Third = (RadioButton)Third.FindControl("Third");
-            
-            Bases[0] = First;
-            Bases[1] = Second;
-            Bases[2] = Third;
+            RadioButton[] Bases = new RadioButton[] { First, Second, Third };
 
-            //BoxScore = new ScoreBoard(HomeTeam, AwayTeam);
+
+        }
+
+        public Game()
+        {
+            HomeTeam = new Team("", "");
+            AwayTeam = new Team("", "");
+
+            HomeTeam.NewGame();
+            AwayTeam.NewGame();
+
+            Teams = new Team[] { HomeTeam, AwayTeam };
+
+            AwayTeam.Box.Insert(0, 0);
+            
         }
 
         //Strike pitched
-        private void Strike()
+        public void Strike()
         {
             Strikes++;
             if (Strikes == 3)
             {
+                Strikes = 0;
                 Out();
             }
         }
 
         // Ball pitched
-        private void Ball()
+        public void Ball()
         {
             Balls++;
             if (Balls == 4)
             {
+                Balls = 0;
+                Strikes = 0;
                 Walk();
             }
         }
 
         // Out made
-        private void Out()
+        public void Out()
         {
             Outs++;
+            Balls = 0;
+            Strikes = 0;
             if (Outs == 3)
             {
                 NextInning();
             }
         }
 
-        private void Walk()
+        public void Walk()
         {
             AdvanceBases(1);
         }
 
-        private void Hit(int n)
+        public void Hit(int n)
         {
             AdvanceBases(n);
         }
@@ -226,6 +299,7 @@ namespace SmallBall
                 {
                     Bases[1].Checked = true;
                 }
+                Bases[0].Checked = true;
             }
 
         }
@@ -237,7 +311,431 @@ namespace SmallBall
         }
     }
 
-    class Inning
+    public class UserGame : Game
+    {
+        public UserGame(Team UserTeam, Team Opponent, bool isHome)
+        {
+            if (isHome)
+            {
+                HomeTeam = UserTeam;
+                AwayTeam = Opponent;
+            }
+            else
+            {
+                HomeTeam = Opponent;
+                AwayTeam = UserTeam;
+            }
+        }
+
+        
+
+        public Swings OppSwing()
+        {
+            int n = random.Next(3);
+            return (Swings)n;
+        }
+
+        public Pitches OppPitch()
+        {
+            int n = random.Next(3);
+            return (Pitches)n;
+        }
+
+        public void Take()
+        {
+            Pitches p = OppPitch();
+            int n = random.Next(100);
+            if(p == Pitches.PitchOut)
+            {
+                Ball();
+            }
+            else if(p == Pitches.Fastball)
+            {
+                if(n < 75)
+                {
+                    Strike();
+                }
+                else
+                {
+                    Ball();
+                }
+            }
+            else if(p == Pitches.BreakingBall)
+            {
+                if (n < 65)
+                {
+                    Strike();
+                }
+                else
+                {
+                    Ball();
+                }
+            }
+            else if (p == Pitches.OffSpeed)
+            {
+                if (n < 85)
+                {
+                    Strike();
+                }
+                else
+                {
+                    Ball();
+                }
+            }
+        }
+
+        public void GuessFB()
+        {
+            Pitches p = OppPitch();
+            int n = random.Next(100);
+            if (p == Pitches.PitchOut)
+            {
+                if(n < 80)
+                {
+                    Strike();
+                }
+                else
+                {
+                    Hit(random.Next(1, 4));
+                }
+            }
+            else if (p == Pitches.Fastball)
+            {
+                if (n < 35)
+                {
+                    Strike();
+                }
+                else
+                {
+                    Hit(random.Next(1, 4));
+                }
+            }
+            else if (p == Pitches.BreakingBall)
+            {
+                if(n < 75)
+                {
+                    Strike();
+                }
+                else
+                {
+                    Hit(random.Next(1, 4));
+                }
+            }
+            else if (p == Pitches.OffSpeed)
+            {
+                if(n < 75)
+                {
+                    Strike();
+                }
+                else
+                {
+                    Hit(random.Next(1, 4));
+                }
+            }
+        }
+
+        public void GuessBB()
+        {
+            Pitches p = OppPitch();
+            int n = random.Next(100);
+            if (p == Pitches.PitchOut)
+            {
+                if(n < 80)
+                {
+                    Strike();
+                }
+                else
+                {
+                    Hit(random.Next(1, 4));
+                }
+            }
+            else if (p == Pitches.Fastball)
+            {
+                if(n < 75)
+                {
+                    Strike();
+                }
+                else
+                {
+                    Hit(random.Next(1, 4));
+                }
+            }
+            else if (p == Pitches.BreakingBall)
+            {
+                if (n < 35)
+                {
+                    Strike();
+                }
+                else
+                {
+                    Hit(random.Next(1, 4));
+                }
+            }
+            else if (p == Pitches.OffSpeed)
+            {
+                if (n < 75)
+                {
+                    Strike();
+                }
+                else
+                {
+                    Hit(random.Next(1, 4));
+                }
+            }
+        }
+
+        public void GuessOS()
+        {
+            Pitches p = OppPitch();
+            int n = random.Next(100);
+            if (p == Pitches.PitchOut)
+            {
+                if (n < 80)
+                {
+                    Strike();
+                }
+                else
+                {
+                    Hit(random.Next(1, 4));
+                }
+            }
+            else if (p == Pitches.Fastball)
+            {
+                if (n < 75)
+                {
+                    Strike();
+                }
+                else
+                {
+                    Hit(random.Next(1, 4));
+                }
+            }
+            else if (p == Pitches.BreakingBall)
+            {
+                if (n < 75)
+                {
+                    Strike();
+                }
+                else
+                {
+                    Hit(random.Next(1, 4));
+                }
+            }
+            else if (p == Pitches.OffSpeed)
+            {
+                if (n < 35)
+                {
+                    Strike();
+                }
+                else
+                {
+                    Hit(random.Next(1, 4));
+                }
+            }
+        }
+
+        public void PitchOut()
+        {
+            Swings p = OppSwing();
+            int n = random.Next(100);
+            if (p == Swings.Take)
+            {
+                if (n < 80)
+                {
+                    Strike();
+                }
+                else
+                {
+                    Ball();
+                }
+            }
+            else if (p == Swings.Fastball)
+            {
+                if (n < 80)
+                {
+                    Strike();
+                }
+                else
+                {
+                    Hit(random.Next(1, 4));
+                }
+            }
+            else if (p == Swings.BreakingBall)
+            {
+                if (n < 80)
+                {
+                    Strike();
+                }
+                else
+                {
+                    Hit(random.Next(1, 4));
+                }
+            }
+            else if (p == Swings.OffSpeed)
+            {
+                if (n < 80)
+                {
+                    Strike();
+                }
+                else
+                {
+                    Hit(random.Next(1, 4));
+                }
+            }
+        }
+
+        public void PitchFB()
+        {
+            Swings p = OppSwing();
+            int n = random.Next(100);
+            if (p == Swings.Take)
+            {
+                if (n < 80)
+                {
+                    Strike();
+                }
+                else
+                {
+                    Ball();
+                }
+            }
+            else if (p == Swings.Fastball)
+            {
+                if (n < 35)
+                {
+                    Strike();
+                }
+                else
+                {
+                    Hit(random.Next(1, 4));
+                }
+            }
+            else if (p == Swings.BreakingBall)
+            {
+                if (n < 75)
+                {
+                    Strike();
+                }
+                else
+                {
+                    Hit(random.Next(1, 4));
+                }
+            }
+            else if (p == Swings.OffSpeed)
+            {
+                if (n < 75)
+                {
+                    Strike();
+                }
+                else
+                {
+                    Hit(random.Next(1, 4));
+                }
+            }
+        }
+
+        public void PitchBB()
+        {
+            Swings p = OppSwing();
+            int n = random.Next(100);
+            if (p == Swings.Take)
+            {
+                if (n < 80)
+                {
+                    Strike();
+                }
+                else
+                {
+                    Ball();
+                }
+            }
+            else if (p == Swings.Fastball)
+            {
+                if (n < 75)
+                {
+                    Strike();
+                }
+                else
+                {
+                    Hit(random.Next(1, 4));
+                }
+            }
+            else if (p == Swings.BreakingBall)
+            {
+                if (n < 35)
+                {
+                    Strike();
+                }
+                else
+                {
+                    Hit(random.Next(1, 4));
+                }
+            }
+            else if (p == Swings.OffSpeed)
+            {
+                if (n < 75)
+                {
+                    Strike();
+                }
+                else
+                {
+                    Hit(random.Next(1, 4));
+                }
+            }
+        }
+
+        public void PitchOS()
+        {
+            Swings p = OppSwing();
+            int n = random.Next(100);
+            if (p == Swings.Take)
+            {
+                if (n < 80)
+                {
+                    Strike();
+                }
+                else
+                {
+                    Ball();
+                }
+            }
+            else if (p == Swings.Fastball)
+            {
+                if (n < 75)
+                {
+                    Strike();
+                }
+                else
+                {
+                    Hit(random.Next(1, 4));
+                }
+            }
+            else if (p == Swings.BreakingBall)
+            {
+                if (n < 75)
+                {
+                    Strike();
+                }
+                else
+                {
+                    Hit(random.Next(1, 4));
+                }
+            }
+            else if (p == Swings.OffSpeed)
+            {
+                if (n < 35)
+                {
+                    Strike();
+                }
+                else
+                {
+                    Hit(random.Next(1, 4));
+                }
+            }
+        }
+    }
+
+    public class Inning
     {
         public enum Side { Top, Bottom };
 
@@ -271,7 +769,7 @@ namespace SmallBall
 
     }
 
-    class Team
+    public class Team
     {
         public string City { get; }
         public string Name { get; }
@@ -338,7 +836,7 @@ namespace SmallBall
         }
     }
 
-    class Player
+    public class Player
     {
         public string Name { get; private set; }
         public int Bat { get; private set; }
@@ -360,7 +858,7 @@ namespace SmallBall
         }
     }
 
-    class ScoreBoard
+    public class ScoreBoard
     {
         public DataGrid BoxScore = new DataGrid();
 
