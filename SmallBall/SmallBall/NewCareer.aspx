@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Login.aspx.cs" Inherits="SmallBall.Login" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="NewCareer.aspx.cs" Inherits="SmallBall.NewCareer" %>
 
 <!DOCTYPE html>
 
@@ -10,8 +10,6 @@
     <form id="form1" runat="server">
         <div>
         </div>
-        <asp:Login ID="Login1" runat="server">
-        </asp:Login>
     </form>
 </body>
 </html>

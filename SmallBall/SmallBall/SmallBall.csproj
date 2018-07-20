@@ -68,17 +68,46 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ball.jpg" />
+    <Content Include="CareerHome.aspx" />
+    <Content Include="field.jpg" />
     <Content Include="Login.aspx" />
+    <Content Include="MainMenu.aspx" />
+    <Content Include="NewCareer.aspx" />
     <Content Include="PlayBall.aspx" />
+    <Content Include="Practice.aspx" />
+    <Content Include="Register.aspx" />
+    <Content Include="StartPage.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CareerHome.aspx.cs">
+      <DependentUpon>CareerHome.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CareerHome.aspx.designer.cs">
+      <DependentUpon>CareerHome.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MainMenu.aspx.cs">
+      <DependentUpon>MainMenu.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MainMenu.aspx.designer.cs">
+      <DependentUpon>MainMenu.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="NewCareer.aspx.cs">
+      <DependentUpon>NewCareer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NewCareer.aspx.designer.cs">
+      <DependentUpon>NewCareer.aspx</DependentUpon>
     </Compile>
     <Compile Include="PlayBall.aspx.cs">
       <DependentUpon>PlayBall.aspx</DependentUpon>
@@ -87,7 +116,28 @@
     <Compile Include="PlayBall.aspx.designer.cs">
       <DependentUpon>PlayBall.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Practice.aspx.cs">
+      <DependentUpon>Practice.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Practice.aspx.designer.cs">
+      <DependentUpon>Practice.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Register.aspx.cs">
+      <DependentUpon>Register.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Register.aspx.designer.cs">
+      <DependentUpon>Register.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="StartPage.aspx.cs">
+      <DependentUpon>StartPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="StartPage.aspx.designer.cs">
+      <DependentUpon>StartPage.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
