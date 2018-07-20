@@ -38,12 +38,15 @@
                 BorderStyle="Ridge" 
                 ItemStyle-BorderColor="gray" HeaderStyle-BorderColor="Gray">
             </asp:DataGrid>
+            
             <asp:Label ID="Label3" runat="server" Text="Balls"></asp:Label>
             <asp:TextBox ID="Balls" runat="server" Enabled="false" Width="3%"></asp:TextBox>
             <asp:Label ID="Label2" runat="server" Text="Strikes"></asp:Label>
             <asp:TextBox ID="Strikes" runat="server" Enabled="false" Width="3%"></asp:TextBox>
             <asp:Label ID="Label1" runat="server" Text="Outs"></asp:Label>
-            <asp:TextBox ID="Outs" runat="server" Enabled="false" Width="3%"></asp:TextBox>       
+            <asp:TextBox ID="Outs" runat="server" Enabled="false" Width="3%"></asp:TextBox>
+            <asp:Label ID="Label4" runat="server" Text="Feed"></asp:Label>
+            <asp:TextBox ID="GameFeed" runat="server" Width="50%" TextMode="MultiLine" ReadOnly="true" Rows="3"></asp:TextBox>
         </div>
         <div>
             <asp:RadioButton ID="Third" runat="server" BorderWidth="100" BorderColor="#996633" Enabled="false" ForeColor="Black"/>
