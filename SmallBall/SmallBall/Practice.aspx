@@ -13,17 +13,17 @@
          </div>
         <asp:Button ID="NewGame" runat="server" Text="New Game" Width="25%" OnClick="NewGame_Click"/>
         <div>
-            <asp:Button ID="Take" runat="server" Text="Take" Width="25%" OnClick="Take_Click" />
-            <asp:Button ID="PitchOut" runat="server" Text="Pitch Out" Width="25%" OnClick="PitchOut_Click"/>
+            <asp:Button ID="Take" runat="server" Text="Take" Width="25%" OnClick="Take_Click" Visible="false"/>
+            <asp:Button ID="PitchOut" runat="server" Text="Pitch Out" Width="25%" OnClick="PitchOut_Click" Visible="false"/>
         </div>
-        <div><asp:Button ID="GuessFB" runat="server" Text="Guess Fastball" Width="25%" OnClick="GuessFB_Click"/>
-            <asp:Button ID="Fastball" runat="server" Text="Fastball" Width="25%" OnClick="Fastball_Click"/>
+        <div><asp:Button ID="GuessFB" runat="server" Text="Guess Fastball" Width="25%" OnClick="GuessFB_Click" Visible="false"/>
+            <asp:Button ID="Fastball" runat="server" Text="Fastball" Width="25%" OnClick="Fastball_Click" Visible="false"/>
         </div>
-        <div><asp:Button ID="GuessBB" runat="server" Text="Guess Breaking Ball" Width="25%" OnClick="GuessBB_Click" />
-            <asp:Button ID="BreakingBall" runat="server" Text="Breaking Ball" Width="25%" OnClick="BreakingBall_Click"/>
+        <div><asp:Button ID="GuessBB" runat="server" Text="Guess Breaking Ball" Width="25%" OnClick="GuessBB_Click" Visible="false"/>
+            <asp:Button ID="BreakingBall" runat="server" Text="Breaking Ball" Width="25%" OnClick="BreakingBall_Click" Visible="false"/>
         </div>
-        <div><asp:Button ID="GuessOS" runat="server" Text="Guess Off Speed" Width="25%" OnClick="GuessOS_Click" />
-            <asp:Button ID="OffSpeed" runat="server" Text="Off Speed" Width="25%" OnClick="OffSpeed_Click"/>
+        <div><asp:Button ID="GuessOS" runat="server" Text="Guess Off Speed" Width="25%" OnClick="GuessOS_Click" Visible="false"/>
+            <asp:Button ID="OffSpeed" runat="server" Text="Off Speed" Width="25%" OnClick="OffSpeed_Click" Visible="false"/>
         </div>
         <div><asp:DataGrid ID="BoxScore" 
                 runat="server" 

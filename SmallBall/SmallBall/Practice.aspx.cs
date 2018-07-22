@@ -4,7 +4,6 @@ Login Logout Page
 SQL Server teams
 Save function
 Photo by Francisco Gonzalez on Unsplash
-hide/disable buttons
 
  */
 
@@ -39,11 +38,8 @@ namespace SmallBall
             TextBox Feed = this.form1.FindControl("GameFeed") as TextBox;
 
             Balls.Text = game.Balls.ToString();
-
             Strikes.Text = game.Strikes.ToString();
-
             Outs.Text = game.Outs.ToString();
-
             Feed.Text = game.GameFeed.Text;
 
             RadioButton First = this.form1.FindControl("First") as RadioButton;
@@ -54,17 +50,46 @@ namespace SmallBall
             Second.Checked = game.Second.Checked;
             Third.Checked = game.Third.Checked;
 
+            if (game.isHome)
+            {
+                if(game.Inning.Half == Inning.Side.Top)
+                {
+                    Take.Visible = false;
+                    GuessBB.Visible = false;
+                    GuessFB.Visible = false;
+                    GuessOS.Visible = false;
+                    PitchOut.Visible = true;
+                    Fastball.Visible = true;
+                    OffSpeed.Visible = true;
+                    BreakingBall.Visible = true;
+                }
+                else
+                {
+                    Take.Visible = true;
+                    GuessBB.Visible = true;
+                    GuessFB.Visible = true;
+                    GuessOS.Visible = true;
+                    PitchOut.Visible = false;
+                    Fastball.Visible = false;
+                    OffSpeed.Visible = false;
+                    BreakingBall.Visible = false;
+                }
+            }
+
             if (game.GameOver)
             {
+                NewGame.Visible = true;
                 // show SHOW RESULTS ETC ===================================================================================================================================================
             }
         }
 
         protected void NewGame_Click(object sender, EventArgs e)
         {
+            NewGame.Visible = false;
             Team user = new Team("KC", "Bears");
             Team opp = new Team("NY", "Knights");
             Game game = new Game(user, opp, true);
+            Application.Contents.Remove("game");
             Application.Contents.Add("game", game);
 
             Game_Manager(game);
@@ -72,10 +97,7 @@ namespace SmallBall
 
         protected void Take_Click(object sender, EventArgs e)
         {
-            Game game = (Game)Application.Contents.Get("game");
-            //RadioButton[] bases = (RadioButton[])Application.Contents.Get("bases");
-            
-            
+            Game game = (Game)Application.Contents.Get("game");            
             game.Take();
             Game_Manager(game);
         }
@@ -83,9 +105,6 @@ namespace SmallBall
         protected void GuessFB_Click(object sender, EventArgs e)
         {
             Game game = (Game)Application.Contents.Get("game");
-            //RadioButton[] bases = (RadioButton[])Application.Contents.Get("bases");
-            TextBox Feed = this.form1.FindControl("GameFeed") as TextBox;
-            Feed.Text = "Fastball Guessed\n" + Feed.Text;
             game.GuessFB();
             Game_Manager(game);
         }
@@ -93,7 +112,6 @@ namespace SmallBall
         protected void GuessBB_Click(object sender, EventArgs e)
         {
             Game game = (Game)Application.Contents.Get("game");
-            //RadioButton[] bases = (RadioButton[])Application.Contents.Get("bases");
             game.GuessBB();
             Game_Manager(game);
         }
@@ -101,7 +119,6 @@ namespace SmallBall
         protected void GuessOS_Click(object sender, EventArgs e)
         {
             Game game = (Game)Application.Contents.Get("game");
-            //RadioButton[] bases = (RadioButton[])Application.Contents.Get("bases");
             game.GuessOS();
             Game_Manager(game);
         }
@@ -109,7 +126,6 @@ namespace SmallBall
         protected void PitchOut_Click(object sender, EventArgs e)
         {
             Game game = (Game)Application.Contents.Get("game");
-            //RadioButton[] bases = (RadioButton[])Application.Contents.Get("bases");
             game.PitchOut();
             Game_Manager(game);
         }
@@ -117,7 +133,6 @@ namespace SmallBall
         protected void Fastball_Click(object sender, EventArgs e)
         {
             Game game = (Game)Application.Contents.Get("game");
-            //RadioButton[] bases = (RadioButton[])Application.Contents.Get("bases");
             game.PitchFB();
             Game_Manager(game);
         }
@@ -125,7 +140,6 @@ namespace SmallBall
         protected void OffSpeed_Click(object sender, EventArgs e)
         {
             Game game = (Game)Application.Contents.Get("game");
-            //RadioButton[] bases = (RadioButton[])Application.Contents.Get("bases");
             game.PitchOS();
             Game_Manager(game);
         }
@@ -133,7 +147,6 @@ namespace SmallBall
         protected void BreakingBall_Click(object sender, EventArgs e)
         {
             Game game = (Game)Application.Contents.Get("game");
-            //RadioButton[] bases = (RadioButton[])Application.Contents.Get("bases");
             game.PitchBB();
             Game_Manager(game);
         }
@@ -143,7 +156,7 @@ namespace SmallBall
     {
 
         private Team[] Teams { get; set; } = new Team[2];
-        private Inning Inning { get; set; } = new Inning();
+        public Inning Inning { get; private set; } = new Inning();
         private ScoreBoard BoxScore { get; }
         public int Balls { get; private set; }
         public int Strikes { get; private set; }
@@ -161,10 +174,12 @@ namespace SmallBall
         public Team AwayTeam { get; set; }
         public bool GameOver { get; private set; } = false;
         public TextBox GameFeed { get; private set; }
+        public bool isHome { get; private set; } = true;
 
         // Initialize game
-        public Game(Team UserTeam, Team Opponent, bool isHome)
+        public Game(Team UserTeam, Team Opponent, bool userHome)
         {
+            isHome = userHome;
             if (isHome)
             {
                 HomeTeam = UserTeam;
@@ -194,8 +209,6 @@ namespace SmallBall
             Bases[0] = First;
             Bases[1] = Second;
             Bases[2] = Third;
-
-
         }
 
         public Game()
@@ -326,7 +339,6 @@ namespace SmallBall
         public void AdvanceBases(int n)
         {
             int runsScored = 0;
-            System.Diagnostics.Debug.WriteLine(n.ToString() + "base hit");
             for (int i = 0; i < n; i++)
             {
                 //if runner on third, clear third, score run
@@ -354,37 +366,17 @@ namespace SmallBall
                     Bases[0].Checked = true;
                 }
             }
-
-            string feed;
-
-            if (n == 1)
-            {
-                feed = "Single";
-            }
-            else if (n == 2)
-            {
-                feed = "Double";
-            }
-            else if (n == 3)
-            {
-                feed = "Triple";
-            }
-            else
-            {
-                feed = "Homerun";
-            }
             if (runsScored > 0)
             {
                 if (runsScored == 1)
                 {
-                    feed += " : 1 run scores";
+                    UpdateFeed("1 run scores");
                 }
                 else
                 {
-                    feed += " : " + runsScored.ToString() + " runs score";
+                    UpdateFeed(runsScored.ToString() + " runs score");
                 }
             }
-            UpdateFeed(feed);
         }
 
         public void ClearBases()
@@ -468,7 +460,9 @@ namespace SmallBall
                 }
                 else
                 {
-                    Hit(random.Next(1, 4));
+                    int hit = random.Next(1, 4);
+                    Hit(hit);
+                    UpdateFeed(hit);
                 }
             }
             else if (p == Pitches.Fastball)
@@ -479,7 +473,9 @@ namespace SmallBall
                 }
                 else
                 {
-                    Hit(random.Next(1, 4));
+                    int hit = random.Next(1, 4);
+                    Hit(hit);
+                    UpdateFeed(hit);
                 }
             }
             else if (p == Pitches.BreakingBall)
@@ -490,7 +486,9 @@ namespace SmallBall
                 }
                 else
                 {
-                    Hit(random.Next(1, 4));
+                    int hit = random.Next(1, 4);
+                    Hit(hit);
+                    UpdateFeed(hit);
                 }
             }
             else if (p == Pitches.OffSpeed)
@@ -501,7 +499,9 @@ namespace SmallBall
                 }
                 else
                 {
-                    Hit(random.Next(1, 4));
+                    int hit = random.Next(1, 4);
+                    Hit(hit);
+                    UpdateFeed(hit);
                 }
             }
         }
@@ -518,7 +518,9 @@ namespace SmallBall
                 }
                 else
                 {
-                    Hit(random.Next(1, 4));
+                    int hit = random.Next(1, 4);
+                    Hit(hit);
+                    UpdateFeed(hit);
                 }
             }
             else if (p == Pitches.Fastball)
@@ -529,7 +531,9 @@ namespace SmallBall
                 }
                 else
                 {
-                    Hit(random.Next(1, 4));
+                    int hit = random.Next(1, 4);
+                    Hit(hit);
+                    UpdateFeed(hit);
                 }
             }
             else if (p == Pitches.BreakingBall)
@@ -540,7 +544,9 @@ namespace SmallBall
                 }
                 else
                 {
-                    Hit(random.Next(1, 4));
+                    int hit = random.Next(1, 4);
+                    Hit(hit);
+                    UpdateFeed(hit);
                 }
             }
             else if (p == Pitches.OffSpeed)
@@ -551,7 +557,9 @@ namespace SmallBall
                 }
                 else
                 {
-                    Hit(random.Next(1, 4));
+                    int hit = random.Next(1, 4);
+                    Hit(hit);
+                    UpdateFeed(hit);
                 }
             }
         }
@@ -568,7 +576,9 @@ namespace SmallBall
                 }
                 else
                 {
-                    Hit(random.Next(1, 4));
+                    int hit = random.Next(1, 4);
+                    Hit(hit);
+                    UpdateFeed(hit);
                 }
             }
             else if (p == Pitches.Fastball)
@@ -579,7 +589,9 @@ namespace SmallBall
                 }
                 else
                 {
-                    Hit(random.Next(1, 4));
+                    int hit = random.Next(1, 4);
+                    Hit(hit);
+                    UpdateFeed(hit);
                 }
             }
             else if (p == Pitches.BreakingBall)
@@ -590,7 +602,9 @@ namespace SmallBall
                 }
                 else
                 {
-                    Hit(random.Next(1, 4));
+                    int hit = random.Next(1, 4);
+                    Hit(hit);
+                    UpdateFeed(hit);
                 }
             }
             else if (p == Pitches.OffSpeed)
@@ -601,7 +615,9 @@ namespace SmallBall
                 }
                 else
                 {
-                    Hit(random.Next(1, 4));
+                    int hit = random.Next(1, 4);
+                    Hit(hit);
+                    UpdateFeed(hit);
                 }
             }
         }
@@ -629,7 +645,9 @@ namespace SmallBall
                 }
                 else
                 {
-                    Hit(random.Next(1, 4));
+                    int hit = random.Next(1, 4);
+                    Hit(hit);
+                    UpdateFeed(hit);
                 }
             }
             else if (p == Swings.BreakingBall)
@@ -640,7 +658,9 @@ namespace SmallBall
                 }
                 else
                 {
-                    Hit(random.Next(1, 4));
+                    int hit = random.Next(1, 4);
+                    Hit(hit);
+                    UpdateFeed(hit);
                 }
             }
             else if (p == Swings.OffSpeed)
@@ -651,7 +671,9 @@ namespace SmallBall
                 }
                 else
                 {
-                    Hit(random.Next(1, 4));
+                    int hit = random.Next(1, 4);
+                    Hit(hit);
+                    UpdateFeed(hit);
                 }
             }
         }
@@ -679,7 +701,9 @@ namespace SmallBall
                 }
                 else
                 {
-                    Hit(random.Next(1, 4));
+                    int hit = random.Next(1, 4);
+                    Hit(hit);
+                    UpdateFeed(hit);
                 }
             }
             else if (p == Swings.BreakingBall)
@@ -690,7 +714,9 @@ namespace SmallBall
                 }
                 else
                 {
-                    Hit(random.Next(1, 4));
+                    int hit = random.Next(1, 4);
+                    Hit(hit);
+                    UpdateFeed(hit);
                 }
             }
             else if (p == Swings.OffSpeed)
@@ -701,7 +727,9 @@ namespace SmallBall
                 }
                 else
                 {
-                    Hit(random.Next(1, 4));
+                    int hit = random.Next(1, 4);
+                    Hit(hit);
+                    UpdateFeed(hit);
                 }
             }
         }
@@ -729,7 +757,9 @@ namespace SmallBall
                 }
                 else
                 {
-                    Hit(random.Next(1, 4));
+                    int hit = random.Next(1, 4);
+                    Hit(hit);
+                    UpdateFeed(hit);
                 }
             }
             else if (p == Swings.BreakingBall)
@@ -740,7 +770,9 @@ namespace SmallBall
                 }
                 else
                 {
-                    Hit(random.Next(1, 4));
+                    int hit = random.Next(1, 4);
+                    Hit(hit);
+                    UpdateFeed(hit);
                 }
             }
             else if (p == Swings.OffSpeed)
@@ -751,7 +783,9 @@ namespace SmallBall
                 }
                 else
                 {
-                    Hit(random.Next(1, 4));
+                    int hit = random.Next(1, 4);
+                    Hit(hit);
+                    UpdateFeed(hit);
                 }
             }
         }
@@ -779,7 +813,9 @@ namespace SmallBall
                 }
                 else
                 {
-                    Hit(random.Next(1, 4));
+                    int hit = random.Next(1, 4);
+                    Hit(hit);
+                    UpdateFeed(hit);
                 }
             }
             else if (p == Swings.BreakingBall)
@@ -790,7 +826,9 @@ namespace SmallBall
                 }
                 else
                 {
-                    Hit(random.Next(1, 4));
+                    int hit = random.Next(1, 4);
+                    Hit(hit);
+                    UpdateFeed(hit);
                 }
             }
             else if (p == Swings.OffSpeed)
@@ -801,7 +839,9 @@ namespace SmallBall
                 }
                 else
                 {
-                    Hit(random.Next(1, 4));
+                    int hit = random.Next(1, 4);
+                    Hit(hit);
+                    UpdateFeed(hit);
                 }
             }
         }
@@ -813,6 +853,26 @@ namespace SmallBall
             feed += Inning.Num.ToString() + ": ";
             feed += e;
             GameFeed.Text = feed + "\n" + GameFeed.Text;
+        }
+
+        public void UpdateFeed(int e)
+        {
+            if(e == 1)
+            {
+                UpdateFeed("Single");
+            }
+            else if(e == 2)
+            {
+                UpdateFeed("Double");
+            }
+            else if(e == 3)
+            {
+                UpdateFeed("Triple");
+            }
+            else if(e == 4)
+            {
+                UpdateFeed("Homerun");
+            }
         }
     }
 
@@ -847,8 +907,6 @@ namespace SmallBall
 
             return result;
         }
-
-
     }
 
     public class Team
