@@ -21,21 +21,17 @@ namespace SmallBall
             ErrorLabel.Visible = false;
             try
             {
-                SqlConnection sql = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\Joshua\\source\\repos\\ConsoleApp1\\ConsoleApp1\\SmallBallDB.mdf;Integrated Security=True;Connect Timeout=30");
+                SqlConnection sql = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\Joshua\\source\\repos\\SmallBall\\SmallBall\\SmallBall\\App_Data\\SmallBallDB.mdf;Integrated Security=True;Connect Timeout=30");
                 sql.Open();
-                string s = "SELECT * FROM users WHERE Id='" + UserName.Text + "' AND Password='" + Password.Text + "';";
+                string s = "DECLARE @result NVARCHAR(250) EXEC Login @Id='" + UserName.Text + "', @Password='" + Password.Text + "'";
                 SqlCommand command = new SqlCommand(s, sql);
-                SqlDataReader reader = command.ExecuteReader();
-                if (reader.Read())
+                if(command.ExecuteScalar() == null)
                 {
-                    Server.Transfer("MainMenu.aspx");
-                }
-                else
-                {
-                    Password.Text = "";
-                    ErrorLabel.Text = "Invalid Username or Password";
+                    ErrorLabel.Text = "Invalid Login";
                     ErrorLabel.Visible = true;
                 }
+                
+                
             }
             catch(SqlException exception)
             {
