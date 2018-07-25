@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using MySql.Data.MySqlClient;
+
 
 namespace SmallBall
 {
@@ -24,4 +26,6 @@ namespace SmallBall
             Server.Transfer("Register.aspx");
         }
     }
+    
 }
+

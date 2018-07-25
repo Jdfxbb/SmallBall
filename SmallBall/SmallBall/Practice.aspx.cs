@@ -16,6 +16,8 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Collections;
 using System.Web.ApplicationServices;
+
+
 namespace SmallBall
 {
     public partial class Practice : System.Web.UI.Page
@@ -1051,6 +1053,25 @@ namespace SmallBall
 
             DataView dv = new DataView(DT);
             return dv;
+        }
+    }
+
+    public class City
+    {
+        public string CityName { get; private set; }
+        public string State { get; private set; }
+        public string Division { get; private set; }
+
+        public City()
+        {
+            CityName = State = Division = "";
+        }
+
+        public City(string city, string st, string div)
+        {
+            CityName = city;
+            State = st;
+            Division = div;
         }
     }
 }

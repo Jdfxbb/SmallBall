@@ -9,9 +9,20 @@
 <body>
     <form id="form1" runat="server">
         <div>
+            Log In
         </div>
-        <asp:Login ID="Login1" runat="server">
-        </asp:Login>
+        <div>
+        <asp:Label ID="Label1" runat="server" Text="User Name" Width="12%">
+        </asp:Label><asp:TextBox ID="UserName" runat="server"></asp:TextBox>
+        </div>
+        <div>
+        <asp:Label ID="Label2" runat="server" Text="Password" Width="12%">
+        </asp:Label><asp:TextBox ID="Password" runat="server" TextMode="Password"></asp:TextBox>
+        </div>
+        <div>
+            <asp:Button ID="LogInBtn" runat="server" Text="Log In" OnClick="LogInBtn_Click"/>
+        </div>
+        <asp:Label ID="ErrorLabel" runat="server" Text="" Visible="false"></asp:Label>
     </form>
 </body>
 </html>
