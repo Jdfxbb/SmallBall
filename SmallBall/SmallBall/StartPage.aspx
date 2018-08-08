@@ -6,8 +6,8 @@
 <head runat="server">
     <title></title>
 </head>
-<body background="ball.jpg">
-    <form id="form1" runat="server">
+<body background="BallBackground.jpg" background-size="cover" style="background-size:cover;">
+    <form id="form1" runat="server" style="background-color:gray">
         <div>
             <asp:Label ID="Title" runat="server" Text="Small Ball" Font-Size="XX-Large" Font-Bold="true" ForeColor="White"></asp:Label>
         </div>

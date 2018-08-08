@@ -6,25 +6,25 @@
 <head runat="server">
     <title></title>
 </head>
-<body>
-    <form id="form1" runat="server">
+<body background="BallBackground.jpg" background-size="cover" style="background-size:cover">
+    <form id="form1" runat="server" style="background-color:gray">
         <div>
-            Create User
+            <asp:Label runat="server" ForeColor="White" Font-Size="XX-Large" Text="Register"></asp:Label>
         </div>
         <div>
-        <asp:Label ID="Label1" runat="server" Text="User Name" Width="12%">
+        <asp:Label ID="Label1" runat="server" Text="User Name" Width="12%" ForeColor="White">
         </asp:Label><asp:TextBox ID="UserName" runat="server"></asp:TextBox>
         </div>
         <div>
-        <asp:Label ID="Label4" runat="server" Text="Email" Width="12%">
+        <asp:Label ID="Label4" runat="server" Text="Email" Width="12%" ForeColor="White">
         </asp:Label><asp:TextBox ID="Email" runat="server" TextMode="Email"></asp:TextBox>
         </div>
         <div>
-        <asp:Label ID="Label2" runat="server" Text="Password" Width="12%">
+        <asp:Label ID="Label2" runat="server" Text="Password" Width="12%" ForeColor="White">
         </asp:Label><asp:TextBox ID="Password" runat="server" TextMode="Password"></asp:TextBox>
         </div>
         <div>
-        <asp:Label ID="Label3" runat="server" Text="Confirm Password" Width="12%">
+        <asp:Label ID="Label3" runat="server" Text="Confirm Password" Width="12%" ForeColor="White">
         </asp:Label><asp:TextBox ID="ConfirmPassword" runat="server" TextMode="Password"></asp:TextBox>
         </div>
         <div>

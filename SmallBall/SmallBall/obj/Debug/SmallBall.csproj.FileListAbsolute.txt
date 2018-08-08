@@ -55,6 +55,6 @@ C:\Users\Joshua\source\repos\SmallBall\SmallBall\SmallBall\obj\Debug\SmallBall.c
 C:\Users\Joshua\source\repos\SmallBall\SmallBall\SmallBall\obj\Debug\SmallBall.csproj.CopyComplete
 C:\Users\Joshua\source\repos\SmallBall\SmallBall\SmallBall\obj\Debug\SmallBall.dll
 C:\Users\Joshua\source\repos\SmallBall\SmallBall\SmallBall\obj\Debug\SmallBall.pdb
-C:\Users\Joshua\source\repos\SmallBall\SmallBall\SmallBall\obj\Debug\SmallBall.csprojAssemblyReference.cache
 C:\Users\Joshua\source\repos\SmallBall\SmallBall\SmallBall\bin\MySql.Data.dll
 C:\Users\Joshua\source\repos\SmallBall\SmallBall\SmallBall\bin\MySql.Data.xml
+C:\Users\Joshua\source\repos\SmallBall\SmallBall\SmallBall\obj\Debug\SmallBall.csprojAssemblyReference.cache

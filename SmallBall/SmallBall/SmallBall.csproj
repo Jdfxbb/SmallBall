@@ -73,15 +73,20 @@
     <Content Include="App_Data\SmallBallDB_log.ldf">
       <DependentUpon>SmallBallDB.mdf</DependentUpon>
     </Content>
+    <Content Include="BallBackground.jpg" />
     <Content Include="ball.jpg" />
+    <Content Include="bleachers.jpg" />
     <Content Include="CareerHome.aspx" />
-    <Content Include="field.jpg" />
+    <Content Include="Fireworks_transparent_background_12.png" />
+    <Content Include="IMG_0707.PNG" />
     <Content Include="Login.aspx" />
     <Content Include="MainMenu.aspx" />
     <Content Include="NewCareer.aspx" />
+    <Content Include="PaintField.jpg" />
     <Content Include="PlayBall.aspx" />
     <Content Include="Practice.aspx" />
     <Content Include="Register.aspx" />
+    <Content Include="stadium2.jpg" />
     <Content Include="StartPage.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -118,7 +123,6 @@
     </Compile>
     <Compile Include="PlayBall.aspx.cs">
       <DependentUpon>PlayBall.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="PlayBall.aspx.designer.cs">
       <DependentUpon>PlayBall.aspx</DependentUpon>

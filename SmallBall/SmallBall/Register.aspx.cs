@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Data.SqlClient;
 
 namespace SmallBall
 {
@@ -18,37 +17,17 @@ namespace SmallBall
         protected void ConfirmRegister_Click(object sender, EventArgs e)
         {
             ErrorLabel.Visible = false;
-            try
+            // attempt to register, username must be unique
+            SQL_Connect connect = new SQL_Connect();
+            ErrorLabel.Text = connect.Register(UserName.Text, Password.Text, Email.Text);
+            ErrorLabel.Visible = true;
+            if(ErrorLabel.Text == "Registration successful")
             {
-                SqlCommand command = new SqlCommand();
-                SqlConnection sql = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\Joshua\\source\\repos\\SmallBall\\SmallBall\\SmallBall\\App_Data\\SmallBallDB.mdf;Integrated Security=True;Connect Timeout=30");
-
-                sql.Open();
-                string s = /*"DECLARE @responseMessage NVARCHAR(250) " +  */"EXEC AddUser @Id='" + UserName.Text + "',@Password='" + Password.Text + "',@Email='" + Email.Text + "'"/*"',@responseMessage=@responseMessage OUTPUT"*/;
-                command = new SqlCommand(s, sql);
-                command.ExecuteNonQuery();
-                sql.Close();
+                // reset application.contents before adding new user data
+                Application.Contents.Clear();
+                Application.Contents.Add("UserName", UserName.Text);
                 Server.Transfer("MainMenu.aspx");
             }
-            catch (SqlException exception)
-            {
-                ErrorLabel.Visible = true;
-                switch (exception.Number)
-                {
-                    case 2627: ErrorLabel.Text = "Username already exists"; break;
-                }
-            }
-
-    //            DECLARE @responseMessage NVARCHAR(250)
-
-                //exec AddUser
-
-                //    @Id = 'Admin',
-                //	@Password = 'Admin',
-                //	@Email = 'Admin@Admin.Admin',
-                //	@responseMessage = @responseMessage OUTPUT
-
-
         }
     }
 }
